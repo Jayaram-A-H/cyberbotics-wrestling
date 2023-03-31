@@ -34,7 +34,6 @@ class Wrestler (Robot):
         while self.step(time_step) != -1:  # mandatory function to make the simulation run
             motion_library.play('Forwards')
             while(t<100):
-                motion_library.play('Forwards')
                 motion_library.play('TurnRight40')
                 t=t+1
             
