@@ -32,8 +32,7 @@ class Wrestler (Robot):
         time_step = int(self.getBasicTimeStep())
         t=0
         while self.step(time_step) != -1:  # mandatory function to make the simulation run
-            motion_library.play('TurnRight18')
-            
+            motion_library.play('Stand')
 
 
 # create the Robot instance and run main loop
