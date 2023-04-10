@@ -1,85 +1,66 @@
-import sys
 from controller import Robot
+import sys
 sys.path.append('..')
-from utils.accelerometer import Accelerometer
-from utils.finite_state_machine import FiniteStateMachine
-from utils.motion_library import MotionLibrary
-from utils.current_motion_manager import CurrentMotionManager
+# Eve's locate_opponent() is implemented in this module:
+from utils.image_processing import ImageProcessing as IP
+from utils.fall_detection import FallDetection
+from utils.gait_manager import GaitManager
+from utils.camera import Camera
 
 
-class David (Robot):
+class Fatima (Robot):
+    SMALLEST_TURNING_RADIUS = 0.1
+    SAFE_ZONE = 0.75
+    TIME_BEFORE_DIRECTION_CHANGE = 200  # 8000 ms / 40 ms
+
     def __init__(self):
         Robot.__init__(self)
-
-        # retrieves the WorldInfo.basicTimeTime (ms) from the world file
         self.time_step = int(self.getBasicTimeStep())
-        # the Finite State Machine (FSM) is a way of representing a robot's behavior as a sequence of states
-        self.fsm = FiniteStateMachine(
-            states=['DEFAULT', 'BLOCKING_MOTION', 'FRONT_FALL', 'BACK_FALL'],
-            initial_state='DEFAULT',
-            actions={
-                'BLOCKING_MOTION': self.pending,
-                'DEFAULT': self.walk,
-                'FRONT_FALL': self.front_fall,
-                'BACK_FALL': self.back_fall
-            }
-        )
-        self.accelerometer = Accelerometer(self, self.time_step)
-        self.leds = {
-            'right': self.getDevice('Face/Led/Right'),
-            'left': self.getDevice('Face/Led/Left')
-        }
 
-        # Shoulder roll motors for getting up from a side fall
-        self.RShoulderRoll = self.getDevice('RShoulderRoll')
-        self.LShoulderRoll = self.getDevice('LShoulderRoll')
-
-        # load motion files
-        self.current_motion = CurrentMotionManager()
-        self.library = MotionLibrary()
+        self.camera = Camera(self)
+        self.fall_detector = FallDetection(self.time_step, self)
+        self.gait_manager = GaitManager(self, self.time_step)
+        self.heading_angle = 3.14 / 2
+        # Time before changing direction to stop the robot from falling off the ring
+        self.counter = 0
 
     def run(self):
-        self.leds['right'].set(0x0000ff)
-        self.leds['left'].set(0x0000ff)
-        self.current_motion.set(self.library.get('Stand'))
-        self.fsm.transition_to('BLOCKING_MOTION')
-
         while self.step(self.time_step) != -1:
-            self.detect_fall()
-            self.fsm.execute_action()
+            # We need to update the internal theta value of the gait manager at every step:
+            t = self.getTime()
+            self.gait_manager.update_theta()
+            if 0.3 < t < 2:
+                self.start_sequence()
+            elif t > 2:
+                self.fall_detector.check()
+                self.walk()
 
-    def detect_fall(self):
-        '''Detect a fall and update the FSM state.'''
-        [acc_x, acc_y, _] = self.accelerometer.get_new_average()
-        if acc_x < -7:
-            self.fsm.transition_to('FRONT_FALL')
-        elif acc_x > 7:
-            self.fsm.transition_to('BACK_FALL')
-        if acc_y < -7:
-            # Fell to its right, pushing itself on its back
-            self.RShoulderRoll.setPosition(-1.2)
-        elif acc_y > 7:
-            # Fell to its left, pushing itself on its back
-            self.LShoulderRoll.setPosition(1.2)
-
-    def pending(self):
-        # waits for the current motion to finish before doing anything else
-        if self.current_motion.is_over():
-            self.fsm.transition_to('DEFAULT')
+    def start_sequence(self):
+        """At the beginning of the match, the robot walks forwards to move away from the edges."""
+        self.gait_manager.command_to_motors(heading_angle=0)
 
     def walk(self):
-        if self.current_motion.get() != self.library.get('Forward'):
-            self.current_motion.set(self.library.get('Forward'))
+        """Dodge the opponent robot by taking side steps."""
+        normalized_x = self._get_normalized_opponent_x()
+        # We set the desired radius such that the robot walks towards the opponent.
+        # If the opponent is close to the middle, the robot walks straight.
+        desired_radius = (self.SMALLEST_TURNING_RADIUS / normalized_x) if abs(normalized_x) > 1e-3 else None
+        # TODO: position estimation so that if the robot is close to the edge, it switches dodging direction
+        if self.counter > self.TIME_BEFORE_DIRECTION_CHANGE:
+            self.heading_angle = - self.heading_angle
+            self.counter = 0
+        self.counter += 1
+        self.gait_manager.command_to_motors(desired_radius=desired_radius, heading_angle=self.heading_angle)
 
-    def front_fall(self):
-        self.current_motion.set(self.library.get('GetUpFront'))
-        self.fsm.transition_to('BLOCKING_MOTION')
-
-    def back_fall(self):
-        self.current_motion.set(self.library.get('GetUpBack'))
-        self.fsm.transition_to('BLOCKING_MOTION')
+    def _get_normalized_opponent_x(self):
+        """Locate the opponent in the image and return its horizontal position in the range [-1, 1]."""
+        img = self.camera.get_image()
+        _, _, horizontal_coordinate = IP.locate_opponent(img)
+        if horizontal_coordinate is None:
+            return 0
+        return horizontal_coordinate * 2 / img.shape[1] - 1
 
 
 # create the Robot instance and run main loop
-wrestler = David()
+wrestler = Fatima()
 wrestler.run()
