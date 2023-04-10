@@ -35,7 +35,7 @@ class Wrestler (Robot):
             motion_library.play('Forwards')
             while(t<4):
                 motion_library.play('TurnRight40')
-                t=t+1
+                
             
 
 
