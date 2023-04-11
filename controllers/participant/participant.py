@@ -24,7 +24,6 @@ import sys
 sys.path.append('..')
 from utils.motion_library import MotionLibrary
 from utils.camera import Camera
-import cv2
 from utils.image_processing import ImageProcessing as IP
 
 class Wrestler (Robot):
@@ -48,7 +47,12 @@ class Wrestler (Robot):
         # retrieves the WorldInfo.basicTimeTime (ms) from the world file
         time_step = int(self.getBasicTimeStep())
         while self.step(time_step) != -1:  # mandatory function to make the simulation run
-            if(self.opp_hori<0.75 and self.opp_hori>-0.75):
+            img = self.camera.get_image()
+            _,_, horizontal = IP.locate_opponent(img)
+            if horizontal is None:
+                hor=0
+            else: hor= horizontal * 2 / img.shape[1] - 1
+            if(hor>0):
                 motion_library.play('SideStepLeftLoop')
             else:
                 motion_library.play('Forwards')
