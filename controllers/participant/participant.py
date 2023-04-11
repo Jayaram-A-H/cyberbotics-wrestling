@@ -1,28 +1,39 @@
-import sys
+# Copyright 1996-2023 Cyberbotics Ltd.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""Minimalist controller example for the Robot Wrestling Tournament.
+   Demonstrates how to play a simple motion file."""
+
 from controller import Robot
-sys.path.append('..') # adding the utils folder to get access to some custom helper functions, have a look at it
+import sys
+
+# We provide a set of utilities to help you with the development of your controller. You can find them in the utils folder.
+# If you want to see a list of examples that use them, you can go to https://github.com/cyberbotics/wrestling#demo-robot-controllers
+sys.path.append('..')
 from utils.motion_library import MotionLibrary
 
 
-class Bob (Robot):
-    def __init__(self):
-        #   super().__init__()
-        # to load all the motions from the motion folder, we use the Motion_library class:
-        self.library = MotionLibrary()
-
-        # we initialize the shoulder pitch motors using the Robot.getDevice() function:
-        
-
+class Wrestler (Robot):
     def run(self):
-        # to control a motor, we use the setPosition() funct
-        # for more motor control functions, see the documentation: https://cyberbotics.com/doc/reference/motor
-        # to see the list of available devices, see the NAO documentation: https://cyberbotics.com/doc/guide/nao
-
+        # to load all the motions from the motions folder, we use the MotionLibrary class:
+        motion_library = MotionLibrary()
+        # retrieves the WorldInfo.basicTimeTime (ms) from the world file
         time_step = int(self.getBasicTimeStep())
-        while self.step(time_step) != -1:
-            self.library.play('SideStepRight')
+        while self.step(time_step) != -1:  # mandatory function to make the simulation run
+            motion_library.play('Forwards')
 
 
 # create the Robot instance and run main loop
-wrestler = Bob()
+wrestler = Wrestler()
 wrestler.run()
