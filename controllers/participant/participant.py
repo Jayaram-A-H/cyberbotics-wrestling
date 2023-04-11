@@ -18,13 +18,14 @@
 from controller import Robot
 import sys
 
+
 # We provide a set of utilities to help you with the development of your controller. You can find them in the utils folder.
 # If you want to see a list of examples that use them, you can go to https://github.com/cyberbotics/wrestling#demo-robot-controllers
 sys.path.append('..')
 from utils.motion_library import MotionLibrary
 from utils.camera import Camera
 import cv2
-
+from utils.image_processing import ImageProcessing as IP
 
 class Wrestler (Robot):
 
@@ -32,7 +33,7 @@ class Wrestler (Robot):
     def opp_hori(self):
         # to load all the motions from the motions folder, we use the MotionLibrary class:
         img = self.camera.get_image()
-        largest_contour, vertical, horizontal = self.locate_opponent(img)
+        largest_contour, vertical, horizontal = IP.locate_opponent(img)
         if horizontal is None:
             return 0
         return horizontal * 2 / img.shape[1] - 1
