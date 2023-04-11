@@ -48,7 +48,7 @@ class Wrestler (Robot):
         # retrieves the WorldInfo.basicTimeTime (ms) from the world file
         time_step = int(self.getBasicTimeStep())
         while self.step(time_step) != -1:  # mandatory function to make the simulation run
-            if(self.opp_hori()<0.75 and self.opp_hori()>-0.75):
+            if(self.opp_hori<0.75 and self.opp_hori>-0.75):
                 motion_library.play('SideStepLeftLoop')
             else:
                 motion_library.play('Forwards')
