@@ -22,17 +22,36 @@ import sys
 # If you want to see a list of examples that use them, you can go to https://github.com/cyberbotics/wrestling#demo-robot-controllers
 sys.path.append('..')
 from utils.motion_library import MotionLibrary
+from utils.camera import Camera
+import cv2
 
 
 class Wrestler (Robot):
+
+
+    def opp_hori(self):
+        # to load all the motions from the motions folder, we use the MotionLibrary class:
+        img = self.camera.get_image()
+        largest_contour, vertical, horizontal = self.locate_opponent(img)
+        if horizontal is None:
+            return 0
+        return horizontal * 2 / img.shape[1] - 1
+        
+        
+    
+
     def run(self):
         # to load all the motions from the motions folder, we use the MotionLibrary class:
+        self.camera = Camera(self)
         motion_library = MotionLibrary()
         # retrieves the WorldInfo.basicTimeTime (ms) from the world file
         time_step = int(self.getBasicTimeStep())
         while self.step(time_step) != -1:  # mandatory function to make the simulation run
-            motion_library.play('Forwards')
-            motion_library.play('SideStepLeftLoop')
+            if(self.opp_hori()<0.75 and self.opp_hori()>-0.75):
+                motion_library.play('SideStepLeftLoop')
+            else:
+                motion_library.play('Forwards')
+
 
 
 # create the Robot instance and run main loop
