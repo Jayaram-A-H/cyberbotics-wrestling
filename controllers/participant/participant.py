@@ -25,7 +25,7 @@ class Bob (Robot):
         while self.step(time_step) != -1:
             if self.getTime() == 1: # We wait a bit for the robot to stabilise
                 # to play a motion from the library, we use the play() function as follows:
-                self.library.play('Forwards50')
+                self.library.play('SideStepRight')
 
 
 # create the Robot instance and run main loop
