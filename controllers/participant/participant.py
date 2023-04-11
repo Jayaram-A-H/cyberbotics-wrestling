@@ -6,7 +6,7 @@ from utils.motion_library import MotionLibrary
 
 class Bob (Robot):
     def __init__(self):
-        super().__init__()
+        #   super().__init__()
         # to load all the motions from the motion folder, we use the Motion_library class:
         self.library = MotionLibrary()
 
