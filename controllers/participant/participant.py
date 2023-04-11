@@ -55,7 +55,7 @@ class Wrestler (Robot):
             if(hor>0):
                 motion_library.play('SideStepLeftLoop')
             else:
-                motion_library.play('Forwards')
+                motion_library.play('SideStepRightLoop')
 
 
 
