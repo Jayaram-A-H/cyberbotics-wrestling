@@ -29,7 +29,7 @@ from utils.image_processing import ImageProcessing as IP
 class Wrestler (Robot):     
     def run(self):
         # to load all the motions from the motions folder, we use the MotionLibrary class:
-        self.camera = Camera(self)
+        #self.camera = Camera(self)
         motion_library = MotionLibrary()
         # retrieves the WorldInfo.basicTimeTime (ms) from the world file
         time_step = int(self.getBasicTimeStep())
