@@ -38,7 +38,7 @@ class Wrestler (Robot):
         #self.camera = Camera(self)
         
         # retrieves the WorldInfo.basicTimeTime (ms) from the world file
-        self.current_motion.set(self.library.get('Forwards'))
+        self.current_motion.set(self.library.get('Stand'))
         self.fsm.transition_to('BLOCKING_MOTION')
         while self.step(self.time_step) != -1:  # mandatory function to make the simulation run
             self.detect_fall()
