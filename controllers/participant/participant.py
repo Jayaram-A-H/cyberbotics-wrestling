@@ -14,7 +14,7 @@ from utils.current_motion_manager import CurrentMotionManager
 
 class Wrestler (Robot): 
     def __init__(self):
-        Robot.__init__()
+        Robot.__init__(self)
         self.time_step = int(self.getBasicTimeStep())    
         self.fsm=FiniteStateMachine(
             states=['DEFAULT','FRONT_FALL','BACK_FALL','BLOCKING_MOTION'],
@@ -38,7 +38,7 @@ class Wrestler (Robot):
         #self.camera = Camera(self)
         
         # retrieves the WorldInfo.basicTimeTime (ms) from the world file
-        self.current_motion.set(self.library.get('Stand'))
+        self.current_motion.set(self.library.get('Forwards'))
         self.fsm.transition_to('BLOCKING_MOTION')
         while self.step(self.time_step) != -1:  # mandatory function to make the simulation run
             self.detect_fall()
