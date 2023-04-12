@@ -41,7 +41,7 @@ class Wrestler (Robot):
         # retrieves the WorldInfo.basicTimeTime (ms) from the world file
         self.current_motion.set(self.library.get('Stand'))
         #self.current_motion.set(self.library.get('Forwards50'))
-        self.fsm.transition_to('DEFAULT')
+        self.fsm.transition_to('BLOCKING_MOTION')
         
         while self.step(self.time_step) != -1:  # mandatory function to make the simulation run
             self.detect_fall()
@@ -69,7 +69,7 @@ class Wrestler (Robot):
     def pending(self):
         # waits for the current motion to finish before doing anything else
         if self.current_motion.is_over():
-            self.fsm.transition_to('JUST_STAND')
+            self.fsm.transition_to('DEFAULT')
             
     def just_stand(self):
         if self.current_motion.get() != self.library.get('Stand'):
