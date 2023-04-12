@@ -20,10 +20,10 @@ class Wrestler (Robot):
             states=['DEFAULT','FRONT_FALL','BACK_FALL','BLOCKING_MOTION'],
             initial_state='DEFAULT',
             actions={
-            'DEFAULT':self.walk,
-            'BLOCKING_MOTION':self.pending,
-            'FRONT_FALL':self.front_fall,
-            'BACK_FALL':self.back_fall
+                'DEFAULT':self.walk,
+                'BLOCKING_MOTION':self.pending,
+                'FRONT_FALL':self.front_fall,
+                'BACK_FALL':self.back_fall
             }
         )
         self.accelerometer = Accelerometer(self, self.time_step)
@@ -31,7 +31,7 @@ class Wrestler (Robot):
         self.LShoulderRoll = self.getDevice('LShoulderRoll')
         
         self.current_motion = CurrentMotionManager()
-        self.motion_library = MotionLibrary()
+        self.library = MotionLibrary()
         
     def run(self):
         # to load all the motions from the motions folder, we use the MotionLibrary class:
