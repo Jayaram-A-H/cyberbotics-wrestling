@@ -38,6 +38,7 @@ class Wrestler (Robot):
         #self.camera = Camera(self)
         
         # retrieves the WorldInfo.basicTimeTime (ms) from the world file
+        self.current_motion.set(self.library.get('Stand'))
         self.current_motion.set(self.library.get('Forwards50'))
         self.fsm.transition_to('BLOCKING_MOTION')
         
