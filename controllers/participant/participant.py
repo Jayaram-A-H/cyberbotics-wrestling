@@ -26,20 +26,7 @@ from utils.motion_library import MotionLibrary
 from utils.camera import Camera
 from utils.image_processing import ImageProcessing as IP
 
-class Wrestler (Robot):
-
-
-    def opp_hori(self):
-        # to load all the motions from the motions folder, we use the MotionLibrary class:
-        img = self.camera.get_image()
-        largest_contour, vertical, horizontal = IP.locate_opponent(img)
-        if horizontal is None:
-            return 0
-        return horizontal * 2 / img.shape[1] - 1
-        
-        
-    
-
+class Wrestler (Robot):     
     def run(self):
         # to load all the motions from the motions folder, we use the MotionLibrary class:
         self.camera = Camera(self)
