@@ -52,10 +52,8 @@ class Wrestler (Robot):
             if horizontal is None:
                 hor=0
             else: hor= horizontal * 2 / img.shape[1] - 1
-            if(hor>0):
-                motion_library.play('SideStepLeftLoop')
-            else:
-                motion_library.play('SideStepRightLoop')
+            motion_library.play('SideStepLeftLoop')
+            
 
 
 
