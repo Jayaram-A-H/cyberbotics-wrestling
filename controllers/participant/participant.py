@@ -80,6 +80,6 @@ class David (Robot):
         self.fsm.transition_to('BLOCKING_MOTION')
 
 
-# create the Robot instance and run main loop
+# create the Robot instance and run main loopkj
 wrestler = David()
 wrestler.run()
