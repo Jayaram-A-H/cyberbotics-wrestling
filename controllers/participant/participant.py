@@ -68,8 +68,8 @@ class David (Robot):
             self.fsm.transition_to('DEFAULT')
 
     def walk(self):
-        if self.current_motion.get() != self.library.get('SideStepLeft'):
-            self.current_motion.set(self.library.get('SideStepLeft'))
+        if self.current_motion.get() != self.library.get('Forwards50'):
+            self.current_motion.set(self.library.get('Forwards50'))
 
     def front_fall(self):
         self.current_motion.set(self.library.get('GetUpFront'))
