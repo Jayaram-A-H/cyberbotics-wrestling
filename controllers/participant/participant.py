@@ -17,13 +17,14 @@ class Wrestler (Robot):
         Robot.__init__(self)
         self.time_step = int(self.getBasicTimeStep())    
         self.fsm=FiniteStateMachine(
-            states=['DEFAULT','FRONT_FALL','BACK_FALL','BLOCKING_MOTION'],
+            states=['DEFAULT','FRONT_FALL','BACK_FALL','BLOCKING_MOTION','JUST_STAND'],
             initial_state='DEFAULT',
             actions={
                 'DEFAULT':self.walk,
                 'BLOCKING_MOTION':self.pending,
                 'FRONT_FALL':self.front_fall,
-                'BACK_FALL':self.back_fall
+                'BACK_FALL':self.back_fall,
+                'JUST_STAND':self.just_stand
             }
         )
         self.accelerometer = Accelerometer(self, self.time_step)
@@ -39,8 +40,8 @@ class Wrestler (Robot):
         
         # retrieves the WorldInfo.basicTimeTime (ms) from the world file
         self.current_motion.set(self.library.get('Stand'))
-        self.current_motion.set(self.library.get('Forwards50'))
-        self.fsm.transition_to('BLOCKING_MOTION')
+        #self.current_motion.set(self.library.get('Forwards50'))
+        self.fsm.transition_to('DEFAULT')
         
         while self.step(self.time_step) != -1:  # mandatory function to make the simulation run
             self.detect_fall()
@@ -68,11 +69,16 @@ class Wrestler (Robot):
     def pending(self):
         # waits for the current motion to finish before doing anything else
         if self.current_motion.is_over():
-            self.fsm.transition_to('DEFAULT')
-
-    def walk(self):
+            self.fsm.transition_to('JUST_STAND')
+            
+    def just_stand(self):
         if self.current_motion.get() != self.library.get('Stand'):
             self.current_motion.set(self.library.get('Stand'))
+
+
+    def walk(self):
+        if self.current_motion.get() != self.library.get('Forwards50'):
+            self.current_motion.set(self.library.get('Forwards50'))
 
     def front_fall(self):
         self.current_motion.set(self.library.get('GetUpFront'))
