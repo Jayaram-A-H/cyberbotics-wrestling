@@ -26,12 +26,29 @@ class Wrestler (Robot):
             'BACK_FALL':self.back_fall
             }
         )
+        self.accelerometer = Accelerometer(self, self.time_step)
         self.RShoulderRoll = self.getDevice('RShoulderRoll')
         self.LShoulderRoll = self.getDevice('LShoulderRoll')
-        self.accelerometer = Accelerometer(self, self.time_step)
+        
         self.current_motion = CurrentMotionManager()
         self.motion_library = MotionLibrary()
-    
+        
+    def run(self):
+        # to load all the motions from the motions folder, we use the MotionLibrary class:
+        #self.camera = Camera(self)
+        
+        # retrieves the WorldInfo.basicTimeTime (ms) from the world file
+        self.current_motion.set(self.library.get('Stand'))
+        self.fsm.transition_to('BLOCKING_MOTION')
+        while self.step(self.time_step) != -1:  # mandatory function to make the simulation run
+            self.detect_fall()
+            self.fsm.execute_action()
+            #img = self.camera.get_image()
+            #_,_, horizontal = IP.locate_opponent(img)
+            #if horizontal is None:
+            #    hor=0
+            #else: hor= horizontal * 2 / img.shape[1] - 1
+            
     def detect_fall(self):
         '''Detect a fall and update the FSM state.'''
         [acc_x, acc_y, _] = self.accelerometer.get_new_average()
@@ -64,21 +81,7 @@ class Wrestler (Robot):
         self.fsm.transition_to('BLOCKING_MOTION')
 
 
-    def run(self):
-        # to load all the motions from the motions folder, we use the MotionLibrary class:
-        #self.camera = Camera(self)
-        
-        # retrieves the WorldInfo.basicTimeTime (ms) from the world file
-        self.current_motion.set(self.library.get('Forwards'))
-        self.fsm.transition_to('BLOCKING_MOTION')
-        while self.step(self.time_step) != -1:  # mandatory function to make the simulation run
-            self.detect_fall()
-            self.fsm.execute_action()
-            #img = self.camera.get_image()
-            #_,_, horizontal = IP.locate_opponent(img)
-            #if horizontal is None:
-            #    hor=0
-            #else: hor= horizontal * 2 / img.shape[1] - 1
+    
             
             
 
