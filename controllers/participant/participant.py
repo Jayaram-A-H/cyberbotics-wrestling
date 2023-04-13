@@ -23,9 +23,9 @@ class Wrestler (Robot):
     def run(self):
         t=0
         while self.step(self.time_step) != -1:  # mandatory function to make the simulation runk
-            if(t==0):
-                self.current_motion.set(self.library.get('TurnRight40'))
-                t=1
+            if(t<3):
+                self.current_motion.set(self.library.get('SideStepLeft'))
+                t=t+1
             else:
                 self.current_motion.set(self.library.get('ForwardLoop'))
             self.fall_detector.check()
