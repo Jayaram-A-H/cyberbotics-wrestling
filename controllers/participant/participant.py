@@ -26,13 +26,14 @@ class Wrestler (Robot):
             if(t==0):
                 self.current_motion.set(self.library.get('TurnRight40'))
                 t=1
-            self.current_motion.set(self.library.get('ForwardLoop'))
+            else:
+                self.current_motion.set(self.library.get('ForwardLoop'))
             self.fall_detector.check()
             #img = self.camera.get_image()
             #_,_, horizontal = IP.locate_opponent(img)
             #if horizontal is None:
             #    hor=0
             #else: hor= horizontal * 2 / img.shape[1] - 1     
-            
+
 wrestler = Wrestler()
 wrestler.run()
