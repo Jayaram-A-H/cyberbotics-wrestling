@@ -1,4 +1,4 @@
-#WEBOTS_MOTION,V1.0,RShoulderPitch,RShoulderRoll,LShoulderPitch
+#WEBOTS_MOTION,V1.0,RShoulderPitch,RShoulderRoll,LShoulderPitch,LShoulderRoll
 00:00:000,Pose1,-1.5,0,1.5,0
 00:00:040,Pose2,-1.5,0.1,1.5,0.1
 00:00:080,Pose3,-1.5,0.2,1.5,0.2
@@ -34,5 +34,5 @@
 00:01:280,Pose33,-1.5,0,1.5,0
 00:01:320,Pose34,-1.5,0,1.5,0
 00:01:360,Pose35,-1.5,0,1.5,0
-00:02:000,Pose36,1.4,0,*
-00:05:000,Pose37,1.4,0,*
+00:02:000,Pose36,1.4,0,*,*
+00:05:000,Pose37,1.4,0,*,*
