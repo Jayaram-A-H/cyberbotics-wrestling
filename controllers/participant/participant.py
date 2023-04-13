@@ -23,11 +23,7 @@ class Wrestler (Robot):
     def run(self):
         t=0
         while self.step(self.time_step) != -1:  # mandatory function to make the simulation runk
-            if(t<3):
-                self.current_motion.set(self.library.get('SideStepLeft'))
-                t=t+1
-            else:
-                self.current_motion.set(self.library.get('ForwardLoop'))
+            self.current_motion.set(self.library.get('both_hand'))
             self.fall_detector.check()
             #img = self.camera.get_image()
             #_,_, horizontal = IP.locate_opponent(img)
