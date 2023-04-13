@@ -21,8 +21,11 @@ class Wrestler (Robot):
         self.library = MotionLibrary()
         
     def run(self):
-        
+        t=0
         while self.step(self.time_step) != -1:  # mandatory function to make the simulation runk
+            if(t==0):
+                self.current_motion.set(self.library.get('TurnRight40'))
+                t=1
             self.current_motion.set(self.library.get('ForwardLoop'))
             self.fall_detector.check()
             #img = self.camera.get_image()
