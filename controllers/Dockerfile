@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 RUN pip3 install --upgrade pip && \
     pip3 install --no-cache-dir \
-    opencv-python \
+    opencv-python \ 
     scipy \
     ahrs
 

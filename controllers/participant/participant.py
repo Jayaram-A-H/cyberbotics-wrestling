@@ -60,7 +60,7 @@ class Eve (Robot):
         elif self.opponent_position.average > 0.4:
             self.current_motion.set(self.motions['TurnRight'])
         else:
-            # dodging by alternating between left and right side steps to avoid easily falling off the ring
+            # dodging by alternating between left and rigt side steps to avoid easily falling off the ring
             if self.dodging_direction == 'left':
                 if self.counter < self.NUMBER_OF_DODGE_STEPS:
                     self.current_motion.set(self.motions['SideStepLeft'])
