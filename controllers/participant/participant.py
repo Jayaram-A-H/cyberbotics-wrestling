@@ -54,3 +54,6 @@ class Wrestler (Robot):
         if horizontal_coordinate is None:
             return 0
         return horizontal_coordinate * 2 / img.shape[1] - 1
+
+wrestler=Wrestler()
+wrestler.run()
