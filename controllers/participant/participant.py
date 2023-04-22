@@ -40,14 +40,14 @@ class Wrestler (Robot):
         # We set the desired radius such that the robot walks towards the opponent.
         # If the opponent is close to the middle, the robot walks straight.
         desired_radius = (self.SMALLEST_TURNING_RADIUS / normalized_x) if abs(normalized_x) > 1e-3 else None
-        # TODO: position estimation so that if the robot is close to the edge, it switches dodging direction
+        # TODO: position estimation so that if the robot is close to the edge, it switch    es dodging direction
         if self.counter > self.TIME_BEFORE_DIRECTION_CHANGE:
             self.heading_angle = - self.heading_angle
             self.counter = 0
         self.counter += 1
         self.gait_manager.command_to_motors(desired_radius=desired_radius, heading_angle=self.heading_angle)
         
-     def _get_normalized_opponent_x(self):
+    def _get_normalized_opponent_x(self):
         """Locate the opponent in the image and return its horizontal position in the range [-1, 1]."""
         img = self.camera.get_image()
         _, _, horizontal_coordinate = IP.locate_opponent(img)
