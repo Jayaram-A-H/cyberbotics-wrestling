@@ -41,7 +41,7 @@ class Fatima (Robot):
 
     def walk(self):
         """Dodge the opponent robot by taking side steps."""
-        normalized_x = self._get_normalized_opponent_x()
+        normalized_x = self.get_normalized_opponent_x()
         # We set the desired radius such that the robot walks towards the opponent.
         # If the opponent is close to the middle, the robot walks straight.
         desired_radius = (self.SMALLEST_TURNING_RADIUS / normalized_x) if abs(normalized_x) > 1e-3 else None
@@ -52,7 +52,7 @@ class Fatima (Robot):
         self.counter += 1
         self.gait_manager.command_to_motors(desired_radius=desired_radius, heading_angle=self.heading_angle)
 
-    def _get_normalized_opponent_x(self):
+    def get_normalized_opponent_x(self):
         """Locate the opponent in the image and return its horizontal position in the range [-1, 1]."""
         img = self.camera.get_image()
         _, _, horizontal_coordinate = IP.locate_opponent(img)
