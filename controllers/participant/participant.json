@@ -1,6 +1,6 @@
 {
   "name": "Jayaram",
   "description": "Demonstrates how to access the LEDs and play a custom motion file. Beats Bob by moving forwards and pushing him to the ground. Doesn't seem to beat Alice though",
-  "country": "INDIA",
+  "country": "IN",
   "programming": "Python"
 }
